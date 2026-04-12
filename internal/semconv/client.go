@@ -19,8 +19,8 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
-	"go.opentelemetry.io/otel/semconv/v1.39.0"
-	"go.opentelemetry.io/otel/semconv/v1.39.0/httpconv"
+	"go.opentelemetry.io/otel/semconv/v1.40.0"
+	"go.opentelemetry.io/otel/semconv/v1.40.0/httpconv"
 )
 
 type HTTPClient struct {
@@ -247,22 +247,26 @@ func (o MetricOpts) AddOptions() metric.AddOption {
 	return o.addOptions
 }
 
-func (n HTTPClient) MetricOptions(ma MetricAttributes) map[string]MetricOpts {
-	opts := map[string]MetricOpts{}
-
+func (n HTTPClient) MetricOptions(ma MetricAttributes) MetricOpts {
 	attributes := n.MetricAttributes(ma.Req, ma.StatusCode, ma.AdditionalAttributes)
 	set := metric.WithAttributeSet(attribute.NewSet(attributes...))
-	opts["new"] = MetricOpts{
+
+	return MetricOpts{
 		measurement: set,
 		addOptions:  set,
 	}
-
-	return opts
 }
 
-func (n HTTPClient) RecordMetrics(ctx context.Context, md MetricData, opts map[string]MetricOpts) {
-	n.requestBodySize.Inst().Record(ctx, md.RequestSize, opts["new"].MeasurementOption())
-	n.requestDuration.Inst().Record(ctx, md.ElapsedTime/1000, opts["new"].MeasurementOption())
+func (n HTTPClient) RecordMetrics(ctx context.Context, md MetricData, opts MetricOpts) {
+	recordOpts := metricRecordOptionPool.Get().(*[]metric.RecordOption)
+	defer func() {
+		*recordOpts = (*recordOpts)[:0]
+		metricRecordOptionPool.Put(recordOpts)
+	}()
+	*recordOpts = append(*recordOpts, opts.MeasurementOption())
+
+	n.requestBodySize.Inst().Record(ctx, md.RequestSize, *recordOpts...)
+	n.requestDuration.Inst().Record(ctx, durationToSeconds(md.RequestDuration), *recordOpts...)
 }
 
 // TraceAttributes returns attributes for httptrace.
