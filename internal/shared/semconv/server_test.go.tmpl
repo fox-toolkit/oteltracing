@@ -18,8 +18,9 @@ import (
 )
 
 func TestHTTPServer_MetricAttributes(t *testing.T) {
-	defaultRequest, err := http.NewRequest("GET", "http://example.com/path?query=test", http.NoBody)
-	require.NoError(t, err)
+	defaultRequest := httptest.NewRequestWithContext(t.Context(), http.MethodGet, "http://example.com/path?query=test", http.NoBody)
+	reqWithPattern := httptest.NewRequestWithContext(t.Context(), http.MethodGet, "/path/abc123", http.NoBody)
+	reqWithPattern.Pattern = "/path/abc123"
 
 	tests := []struct {
 		name                 string
@@ -68,6 +69,21 @@ func TestHTTPServer_MetricAttributes(t *testing.T) {
 					attribute.String("network.protocol.version", "1.1"),
 					attribute.Int64("http.response.status_code", 200),
 					attribute.String("http.route", "/path/${id}"),
+				}, attrs)
+			},
+		},
+		{
+			name: "use route from request pattern",
+			req:  reqWithPattern,
+			wantFunc: func(t *testing.T, attrs []attribute.KeyValue) {
+				require.Len(t, attrs, 6)
+				assert.ElementsMatch(t, []attribute.KeyValue{
+					attribute.String("http.request.method", "GET"),
+					attribute.String("url.scheme", "http"),
+					attribute.String("server.address", "example.com"),
+					attribute.String("network.protocol.name", "http"),
+					attribute.String("network.protocol.version", "1.1"),
+					attribute.String("http.route", "/path/abc123"),
 				}, attrs)
 			},
 		},
@@ -141,7 +157,7 @@ func TestRequestTraceAttrs_HTTPRoute(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			req := httptest.NewRequest(http.MethodGet, "/path/abc123", http.NoBody)
+			req := httptest.NewRequestWithContext(t.Context(), http.MethodGet, "/path/abc123", http.NoBody)
 			req.Pattern = tt.pattern
 
 			attrs := (HTTPServer{}).RequestTraceAttrs("", req, RequestTraceAttrsOpts{})
@@ -189,7 +205,7 @@ func TestRequestTraceAttrs_ClientIP(t *testing.T) {
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			req := httptest.NewRequest(http.MethodGet, "/example", http.NoBody)
+			req := httptest.NewRequestWithContext(t.Context(), http.MethodGet, "/example", http.NoBody)
 			req.RemoteAddr = "1.2.3.4:5678"
 
 			if tt.requestModifierFn != nil {

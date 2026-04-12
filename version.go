@@ -1,3 +1,3 @@
 package oteltracing
 
-const Version = "0.65.0"
+const Version = "0.68.0"

@@ -105,9 +105,6 @@ func Middleware(service string, opts ...Option) fox.MiddlewareFunc {
 
 			// Record the server-side attributes.
 			var additionalAttributes []attribute.KeyValue
-			if pattern := c.Pattern(); pattern != "" {
-				additionalAttributes = []attribute.KeyValue{sc.Route(pattern)}
-			}
 			if cfg.attrsFn != nil {
 				additionalAttributes = append(additionalAttributes, cfg.attrsFn(c)...)
 			}
@@ -117,11 +114,12 @@ func Middleware(service string, opts ...Option) fox.MiddlewareFunc {
 				MetricAttributes: semconv.MetricAttributes{
 					Req:                  c.Request(),
 					StatusCode:           status,
+					Route:                c.Pattern(),
 					AdditionalAttributes: additionalAttributes,
 				},
 				MetricData: semconv.MetricData{
-					RequestSize: c.Request().ContentLength,
-					ElapsedTime: float64(time.Since(requestStartTime)) / float64(time.Millisecond),
+					RequestSize:     c.Request().ContentLength,
+					RequestDuration: time.Since(requestStartTime),
 				},
 			})
 		}
