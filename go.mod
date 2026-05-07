@@ -3,7 +3,7 @@ module github.com/fox-toolkit/oteltracing
 go 1.26.0
 
 require (
-	github.com/fox-toolkit/fox v0.29.3
+	github.com/fox-toolkit/fox v0.29.4
 	github.com/stretchr/testify v1.11.1
 	go.opentelemetry.io/contrib/propagators/b3 v1.43.0
 	go.opentelemetry.io/otel v1.43.0
