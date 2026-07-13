@@ -1,7 +1,7 @@
 package clientip
 
 import (
-	"net"
+	"net/netip"
 
 	"github.com/fox-toolkit/fox"
 	"github.com/fox-toolkit/fox/clientip"
@@ -30,7 +30,7 @@ func newChain(resolvers ...fox.ClientIPResolver) chain {
 }
 
 // ClientIP try to derive the client IP using this resolver chain.
-func (s chain) ClientIP(c *fox.Context) (*net.IPAddr, error) {
+func (s chain) ClientIP(c *fox.Context) (netip.Addr, error) {
 	var lastErr error
 	for _, sub := range s.resolvers {
 		ipAddr, err := sub.ClientIP(c)
@@ -40,7 +40,7 @@ func (s chain) ClientIP(c *fox.Context) (*net.IPAddr, error) {
 		lastErr = err
 	}
 
-	return nil, lastErr
+	return netip.Addr{}, lastErr
 }
 
 func must(resolver fox.ClientIPResolver, err error) fox.ClientIPResolver {
