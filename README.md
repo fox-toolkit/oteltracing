@@ -1,6 +1,5 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/fox-toolkit/oteltracing.svg)](https://pkg.go.dev/github.com/fox-toolkit/oteltracing)
 [![tests](https://github.com/fox-toolkit/oteltracing/actions/workflows/tests.yaml/badge.svg)](https://github.com/fox-toolkit/oteltracing/actions?query=workflow%3Atests)
-[![Go Report Card](https://goreportcard.com/badge/github.com/fox-toolkit/oteltracing)](https://goreportcard.com/report/github.com/fox-toolkit/oteltracing)
 [![codecov](https://codecov.io/gh/fox-toolkit/oteltracing/graph/badge.svg?token=yDSqVOFwtN)](https://codecov.io/gh/fox-toolkit/oteltracing)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/fox-toolkit/oteltracing)
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/fox-toolkit/oteltracing)
