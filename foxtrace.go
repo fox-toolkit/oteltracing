@@ -8,7 +8,9 @@ import (
 	"github.com/fox-toolkit/oteltracing/internal/clientip"
 	"github.com/fox-toolkit/oteltracing/internal/semconv"
 	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
+	otelsemconv "go.opentelemetry.io/otel/semconv/v1.43.0"
 	oteltrace "go.opentelemetry.io/otel/trace"
 )
 
@@ -97,14 +99,32 @@ func Middleware(service string, opts ...Option) fox.MiddlewareFunc {
 			next(c)
 
 			status := c.Writer().Status()
-			span.SetStatus(sc.Status(status))
+			spanCode, spanMsg := sc.Status(status)
+			span.SetStatus(spanCode, spanMsg)
 			span.SetAttributes(sc.ResponseTraceAttrs(semconv.ResponseTelemetry{
 				StatusCode: status,
 				WriteBytes: int64(c.Writer().Size()),
 			})...)
 
-			// Record the server-side attributes.
+			// If the client disconnected mid-request, the original request context carries the real
+			// cause even when the handler never wrote a response that would surface it as a 5xx.
+			// Per the HTTP semantic conventions, span status is Error whenever a detected error exists,
+			// even if the response status itself is not an error. Use the original request context, not
+			// c.Request().Context(): a handler may replace the request with one wrapping a differently-scoped
+			// context, whose Err() would reflect that handler's own lifecycle instead of a client disconnect.
+			var errorTypeAttr attribute.KeyValue
+			if reqErr := req.Context().Err(); reqErr != nil {
+				span.SetStatus(codes.Error, reqErr.Error())
+				errorTypeAttr = otelsemconv.ErrorType(reqErr)
+				span.SetAttributes(errorTypeAttr)
+			}
+
+			// Record the server-side attributes. errorTypeAttr is appended first so a caller-supplied
+			// error.type from the metric attributes function takes precedence over it.
 			var additionalAttributes []attribute.KeyValue
+			if errorTypeAttr.Valid() {
+				additionalAttributes = append(additionalAttributes, errorTypeAttr)
+			}
 			if cfg.attrsFn != nil {
 				additionalAttributes = append(additionalAttributes, cfg.attrsFn(c)...)
 			}

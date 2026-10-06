@@ -10,3 +10,5 @@ go.opentelemetry.io/build-tools/gotmpl v0.26.2 h1:9vhTpBldzBUKyzzbVMfvSJ3xUt8Bmm
 go.opentelemetry.io/build-tools/gotmpl v0.26.2/go.mod h1:HdRgbzMmTtIc7RsXTQhjluT3Fa/gxB2qq4GEwi6k3tY=
 go.opentelemetry.io/build-tools/gotmpl v0.29.0 h1:arLNuPzmIomzXHg+p1qQGrIZWGzmg0TOZP0gYGPBnQQ=
 go.opentelemetry.io/build-tools/gotmpl v0.29.0/go.mod h1:iV4476otkcr5PY9udBRtjwkwCYLv8LvCVpBuKsezbAk=
+go.opentelemetry.io/build-tools/gotmpl v0.30.0 h1:miUEGFDZzQMWPeExGb6pIQev0GxoIGvkNn2ORSppns8=
+go.opentelemetry.io/build-tools/gotmpl v0.30.0/go.mod h1:hiywXmSz2wSEmmc5pwwkrUUcgTU+7xC4XcE9xd/BcOk=

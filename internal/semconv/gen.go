@@ -1,7 +1,7 @@
 // Copyright The OpenTelemetry Authors
 // SPDX-License-Identifier: Apache-2.0
 
-package semconv // import "go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin/internal/semconv"
+package semconv
 
 // Generate semconv package:
 //go:generate go tool -modfile=../../go.tool.mod gotmpl --body=../shared/semconv/bench_test.go.tmpl "--data={}" --out=bench_test.go
