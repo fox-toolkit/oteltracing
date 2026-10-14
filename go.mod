@@ -3,7 +3,7 @@ module github.com/fox-toolkit/oteltracing
 go 1.26.0
 
 require (
-	github.com/fox-toolkit/fox v0.32.1
+	github.com/fox-toolkit/fox v0.33.0
 	github.com/stretchr/testify v1.12.1
 	go.opentelemetry.io/contrib/propagators/b3 v1.47.0
 	go.opentelemetry.io/otel v1.47.0
@@ -21,7 +21,7 @@ require (
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
 	go.opentelemetry.io/otel/log v1.47.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
-	golang.org/x/net v0.59.0 // indirect
-	golang.org/x/sys v0.48.0 // indirect
-	golang.org/x/text v0.42.0 // indirect
+	golang.org/x/net v0.61.0 // indirect
+	golang.org/x/sys v0.49.0 // indirect
+	golang.org/x/text v0.43.0 // indirect
 )
