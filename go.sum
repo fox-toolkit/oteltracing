@@ -1,7 +1,7 @@
 github.com/cespare/xxhash/v2 v2.3.0 h1:UL815xU9SqsFlibzuggzjXhog7bL6oX9BbNZnL2UFvs=
 github.com/cespare/xxhash/v2 v2.3.0/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
-github.com/fox-toolkit/fox v0.33.0 h1:1GTggw1DzrHhdnjiQF0nYrQVPtDtmWorU4/ucRv3FIo=
-github.com/fox-toolkit/fox v0.33.0/go.mod h1:IWpK0++VvaNyc8Gts1Zjefow7WymGiY258wC+yY7Xg4=
+github.com/fox-toolkit/fox v1.0.0 h1:Z8Yus2t3xRWk7rT4aSuYkOeG72k53KgwdFb1RcuWrLc=
+github.com/fox-toolkit/fox v1.0.0/go.mod h1:IWpK0++VvaNyc8Gts1Zjefow7WymGiY258wC+yY7Xg4=
 github.com/go-logr/logr v1.2.2/go.mod h1:jdQByPbusPIv2/zmleS9BjJVeZ6kBagPoEUsqbVz/1A=
 github.com/go-logr/logr v1.4.4 h1:tG4xh9yMsRCAiodLVTxyrkzSZ9+o0L1Kg/+cPVcbP/8=
 github.com/go-logr/logr v1.4.4/go.mod h1:9T104GzyrTigFIr8wt5mBrctHMim0Nb2HLGrmQ40KvY=

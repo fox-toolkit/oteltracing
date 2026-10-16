@@ -11,9 +11,9 @@ var DefaultResolver = newChain(
 	must(clientip.NewLeftmostNonPrivate(clientip.XForwardedForKey, 15)),
 	must(clientip.NewLeftmostNonPrivate(clientip.ForwardedKey, 15)),
 	must(clientip.NewSingleIPHeader(fox.HeaderXRealIP)),
-	must(clientip.NewSingleIPHeader(fox.HeaderCFConnectionIP)),
+	must(clientip.NewSingleIPHeader(fox.HeaderCFConnectingIP)),
 	must(clientip.NewSingleIPHeader(fox.HeaderTrueClientIP)),
-	must(clientip.NewSingleIPHeader(fox.HeaderFastClientIP)),
+	must(clientip.NewSingleIPHeader(fox.HeaderFastlyClientIP)),
 	must(clientip.NewSingleIPHeader(fox.HeaderXAzureClientIP)),
 	must(clientip.NewSingleIPHeader(fox.HeaderXAzureSocketIP)),
 	must(clientip.NewSingleIPHeader(fox.HeaderXAppengineRemoteAddr)),
@@ -30,7 +30,7 @@ func newChain(resolvers ...fox.ClientIPResolver) chain {
 }
 
 // ClientIP try to derive the client IP using this resolver chain.
-func (s chain) ClientIP(c *fox.Context) (netip.Addr, error) {
+func (s chain) ClientIP(c fox.RequestContext) (netip.Addr, error) {
 	var lastErr error
 	for _, sub := range s.resolvers {
 		ipAddr, err := sub.ClientIP(c)
