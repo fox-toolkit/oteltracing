@@ -101,7 +101,7 @@ func WithTracerProvider(provider trace.TracerProvider) Option {
 	})
 }
 
-// WithMeterProvider specifies a meter provider to use for tracing http request.
+// WithMeterProvider specifies a meter provider to use for recording http request metrics.
 // If none is specified, the global meter provider is used.
 func WithMeterProvider(provider metric.MeterProvider) Option {
 	return optionFunc(func(c *config) {
